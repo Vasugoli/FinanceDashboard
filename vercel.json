@@ -1,5 +1,8 @@
 {
-  "framework": "@tanstack/react-start",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".output"
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
