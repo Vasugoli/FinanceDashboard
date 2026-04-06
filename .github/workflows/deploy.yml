@@ -36,7 +36,43 @@ jobs:
         run: |
           mkdir -p deploy-dist
           cp -r dist/client/* deploy-dist/
-          cp public/index.html deploy-dist/index.html || true
+
+          # Find the main script filename (it has a hash)
+          MAIN_SCRIPT=$(ls deploy-dist/assets/main-*.js 2>/dev/null | head -1 | xargs -n1 basename)
+
+          # Create proper index.html with the correct script reference
+          cat > deploy-dist/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <link rel="icon" type="image/x-icon" href="/FinanceDashboard/favicon.ico" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <meta name="theme-color" content="#000000" />
+              <meta name="description" content="Flux | Financial Control Redefined - A modern financial dashboard" />
+              <link rel="apple-touch-icon" href="/FinanceDashboard/logo192.png" />
+              <link rel="manifest" href="/FinanceDashboard/manifest.json" />
+              <title>Flux | Financial Control Redefined</title>
+              <script>
+                const redirect = sessionStorage.redirect;
+                if (redirect) {
+                  delete sessionStorage.redirect;
+                  const path = redirect.replace(/^\/FinanceDashboard/, '').replace(/\/$/, '') || '/';
+                  window.history.replaceState(null, null, '/FinanceDashboard' + path);
+                }
+              </script>
+            </head>
+            <body>
+              <div id="root"></div>
+              <script type="module" src="/FinanceDashboard/assets/MAIN_SCRIPT_PLACEHOLDER"></script>
+            </body>
+          </html>
+          EOF
+
+          # Replace placeholder with actual script name
+          if [ ! -z "$MAIN_SCRIPT" ]; then
+            sed -i "s|MAIN_SCRIPT_PLACEHOLDER|$MAIN_SCRIPT|g" deploy-dist/index.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

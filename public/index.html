@@ -12,9 +12,25 @@
     <link rel="apple-touch-icon" href="/FinanceDashboard/logo192.png" />
     <link rel="manifest" href="/FinanceDashboard/manifest.json" />
     <title>Flux | Financial Control Redefined</title>
+    <script>
+      // Handle any redirect from 404.html
+      const redirect = sessionStorage.redirect;
+      if (redirect) {
+        delete sessionStorage.redirect;
+        const path = redirect.replace(/^\/FinanceDashboard/, '').replace(/\/$/, '') || '/';
+        window.history.replaceState(null, null, '/FinanceDashboard' + path);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/FinanceDashboard/assets/main.js"></script>
+    <script type="module">
+      // Dynamically import the main bundle
+      import('/FinanceDashboard/assets/main.js')
+        .catch(err => {
+          console.error('Failed to load application:', err);
+          document.body.innerHTML = '<p>Failed to load application. Please refresh the page.</p>';
+        });
+    </script>
   </body>
 </html>

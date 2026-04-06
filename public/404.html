@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirecting...</title>
     <script>
-      // Get the path after the domain
-      const redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      if (redirect && redirect !== location.href) {
-        history.replaceState(null, null, redirect);
+      // SPA redirect logic for GitHub Pages
+      // This file is served for all 404 paths, redirecting them back to index.html
+      // The route will then be handled by the React Router on the client side
+
+      const pathName = window.location.pathname;
+      const baseURL = '/FinanceDashboard/';
+
+      // Only redirect if not already at index.html
+      if (!pathName.endsWith('index.html') && !pathName.endsWith('/')) {
+        // Store the intended path and redirect to index.html
+        sessionStorage.redirect = pathName;
+        window.location.href = baseURL + 'index.html';
       }
     </script>
   </head>
   <body>
-    Redirecting...
+    <p>Redirecting to application...</p>
   </body>
 </html>

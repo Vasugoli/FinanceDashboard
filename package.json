@@ -1,5 +1,6 @@
 {
   "name": "financedashboard",
+  "homepage": "https://vasugoli.github.io/FinanceDashboard/",
   "private": true,
   "type": "module",
   "imports": {
