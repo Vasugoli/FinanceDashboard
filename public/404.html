@@ -13,14 +13,14 @@
       const baseURL = '/FinanceDashboard/';
 
       // Only redirect if not already at index.html
-      if (!pathName.endsWith('index.html') && !pathName.endsWith('/')) {
+      if (pathName !== baseURL && !pathName.endsWith('index.html') && !pathName.endsWith('/')) {
         // Store the intended path and redirect to index.html
         sessionStorage.redirect = pathName;
-        window.location.href = baseURL + 'index.html';
+        window.location.replace(baseURL);
       }
     </script>
   </head>
-  <body>
+  <body style="background-color: #0d0d0d; color: white;">
     <p>Redirecting to application...</p>
   </body>
 </html>
