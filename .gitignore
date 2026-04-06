@@ -11,4 +11,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
-.agent/*
+.agents/*
+finance_dashboard_ui_assignment.md
+DESIGN.md
