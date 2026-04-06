@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   Search,
@@ -18,11 +17,7 @@ import { TransactionForm } from '@/components/TransactionForm'
 import { AdminTransactionControls } from '@/components/AdminTransactionControls'
 import { useFinanceStore } from '@/store/useFinanceStore'
 
-export const Route = createFileRoute('/transactions')({
-  component: TransactionsPage,
-})
-
-function TransactionsPage() {
+export default function TransactionsPage() {
   const { transactionsQuery, transactions } = useFinanceData()
   const { user } = useFinanceStore()
   const [searchTerm, setSearchTerm] = useState('')

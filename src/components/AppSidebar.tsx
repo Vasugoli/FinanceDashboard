@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { NavLink } from 'react-router'
 import {
   LayoutDashboard,
   Receipt,
@@ -149,34 +149,41 @@ export function AppSidebar() {
                     tooltip={item.label}
                     className="min-h-11 h-11 sm:h-10 sm:min-h-10 py-2 hover:bg-white hover:shadow-sm data-[active=true]:bg-white data-[active=true]:shadow-sm transition-all"
                   >
-                    <Link
+                    <NavLink
                       to={item.to}
-                      activeProps={{ 'data-active': true }}
-                      className={cn(
-                        'flex items-center w-full gap-3 px-3 rounded-md transition-all relative',
+                      end={item.to === '/'}
+                      className={({ isActive }) =>
+                        cn(
+                          'flex items-center w-full gap-3 px-3 rounded-md transition-all relative',
 
-                        // collapsed mode
-                        'group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0',
+                          // collapsed mode
+                          'group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0',
 
-                        // active text color
-                        'data-[active=true]:text-[#F54E00]',
+                          // active text color
+                          isActive && 'text-[#F54E00]',
 
-                        // LEFT ACTIVE INDICATOR (NO SHIFT)
-                        'data-[active=true]:before:absolute',
-                        'data-[active=true]:before:left-0',
-                        'data-[active=true]:before:top-1',
-                        'data-[active=true]:before:bottom-1',
-                        'data-[active=true]:before:w-1',
-                        'data-[active=true]:before:bg-[#F54E00]',
-                        'data-[active=true]:before:rounded-r',
-                      )}
+                          // LEFT ACTIVE INDICATOR (NO SHIFT)
+                          isActive && 'before:absolute',
+                          isActive && 'before:left-0',
+                          isActive && 'before:top-1',
+                          isActive && 'before:bottom-1',
+                          isActive && 'before:w-1',
+                          isActive && 'before:bg-[#F54E00]',
+                          isActive && 'before:rounded-r',
+                        )
+                      }
+                      data-active={undefined}
                     >
-                      <item.icon className="size-4 shrink-0 transition-colors group-hover:text-[#F54E00]" />
+                      {({ isActive }) => (
+                        <>
+                          <item.icon className={cn('size-4 shrink-0 transition-colors group-hover:text-[#F54E00]', isActive && 'text-[#F54E00]')} />
 
-                      <span className="text-[11px] font-black uppercase tracking-tight transition-transform group-hover:translate-x-1 group-data-[collapsible=icon]:hidden">
-                        {item.label}
-                      </span>
-                    </Link>
+                          <span className="text-[11px] font-black uppercase tracking-tight transition-transform group-hover:translate-x-1 group-data-[collapsible=icon]:hidden">
+                            {item.label}
+                          </span>
+                        </>
+                      )}
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

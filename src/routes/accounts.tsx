@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useFinanceData } from '@/hooks/useFinanceData'
 import { ShieldCheck, RefreshCcw, Lock, Globe } from 'lucide-react'
@@ -6,11 +5,7 @@ import { pageContentEnter } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { ResponsiveContainer, AreaChart, Area } from 'recharts'
 
-export const Route = createFileRoute('/accounts')({
-  component: AccountsPage,
-})
-
-function AccountsPage() {
+export default function AccountsPage() {
   const { accountsQuery, creditCardsQuery } = useFinanceData()
   const [chartsReady, setChartsReady] = useState(false)
   const accounts = accountsQuery.data || []

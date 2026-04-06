@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import {
   ArrowUpRight,
@@ -22,7 +21,6 @@ import {
 } from 'recharts'
 import { useFinanceData } from '@/hooks/useFinanceData'
 import { Skeleton } from '@/components/ui/skeleton'
-// import { useFinanceStore } from '@/store/useFinanceStore';
 import { cardEnter, pageContentEnter } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
@@ -39,9 +37,7 @@ const insightStagger = [
   'motion-safe:delay-150',
 ] as const
 
-export const Route = createFileRoute('/')({ component: App })
-
-function App() {
+export default function DashboardPage() {
   const {
     transactionsQuery,
     performanceQuery,

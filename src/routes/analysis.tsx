@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import {
   ResponsiveContainer,
@@ -19,11 +18,7 @@ import { cn } from '@/lib/utils'
 import { useTheme } from '@/components/ThemeProvider'
 import { pageContentEnter } from '@/lib/motion'
 
-export const Route = createFileRoute('/analysis')({
-  component: AnalysisPage,
-})
-
-function AnalysisPage() {
+export default function AnalysisPage() {
   const { performanceQuery } = useFinanceData()
   const { theme } = useTheme()
   const [chartsReady, setChartsReady] = useState(false)

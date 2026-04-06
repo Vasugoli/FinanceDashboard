@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useFinanceStore } from '@/store/useFinanceStore'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -14,11 +13,7 @@ import Avatar from 'boring-avatars'
 import { pageContentEnter } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/settings')({
-  component: SettingsPage,
-})
-
-function SettingsPage() {
+export default function SettingsPage() {
   const { user, updateProfile } = useFinanceStore()
   const [isSaved, setIsSaved] = useState(false)
   const [formData, setFormData] = useState({
