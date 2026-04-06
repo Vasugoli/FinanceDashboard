@@ -4,23 +4,28 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
+    environment:
+      name: github-pages
+      url: "${{ steps.deployment.outputs.page_url }}"
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -32,54 +37,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare dist for GitHub Pages
-        run: |
-          mkdir -p deploy-dist
-          cp -r dist/client/* deploy-dist/
-
-          # Find the main script filename (it has a hash)
-          MAIN_SCRIPT=$(ls deploy-dist/assets/main-*.js 2>/dev/null | head -1 | xargs -n1 basename)
-
-          # Create proper index.html with the correct script reference
-          cat > deploy-dist/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <link rel="icon" type="image/x-icon" href="/FinanceDashboard/favicon.ico" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <meta name="theme-color" content="#000000" />
-              <meta name="description" content="Flux | Financial Control Redefined - A modern financial dashboard" />
-              <link rel="apple-touch-icon" href="/FinanceDashboard/logo192.png" />
-              <link rel="manifest" href="/FinanceDashboard/manifest.json" />
-              <title>Flux | Financial Control Redefined</title>
-              <script>
-                const redirect = sessionStorage.redirect;
-                if (redirect) {
-                  delete sessionStorage.redirect;
-                  const path = redirect.replace(/^\/FinanceDashboard/, '').replace(/\/$/, '') || '/';
-                  window.history.replaceState(null, null, '/FinanceDashboard' + path);
-                }
-              </script>
-            </head>
-            <body>
-              <div id="root"></div>
-              <script type="module" src="/FinanceDashboard/assets/MAIN_SCRIPT_PLACEHOLDER"></script>
-            </body>
-          </html>
-          EOF
-
-          # Replace placeholder with actual script name
-          if [ ! -z "$MAIN_SCRIPT" ]; then
-            sed -i "s|MAIN_SCRIPT_PLACEHOLDER|$MAIN_SCRIPT|g" deploy-dist/index.html
-          fi
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './deploy-dist'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
         id: deployment
         uses: actions/deploy-pages@v4
